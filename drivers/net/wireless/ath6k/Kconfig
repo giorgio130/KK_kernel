@@ -1,0 +1,14 @@
+#
+# Atheros WiFi driver
+#
+config ATHEROS_AR6000
+	tristate "Atheros AR6000 driver"
+	#depends on INPUT
+	help
+	  Say Y here if you have an Atheros WiFi chip in your system
+
+	  If unsure, say N.
+
+	  To compile this driver as a module, choose M here: the
+	  module will be called ar6000.
+

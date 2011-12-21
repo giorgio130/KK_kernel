@@ -1,0 +1,148 @@
+menu "MX35 Options"
+	depends on ARCH_MX35
+
+config MX35_OPTIONS
+	bool
+	default y
+	select CPU_V6
+	select CACHE_L2X0
+	select OUTER_CACHE
+	select USB_ARCH_HAS_EHCI
+	select ARCH_HAS_EVTMON
+	select ARCH_HAS_RNGC
+
+config MACH_MX35_3DS
+	bool "Support MX35 3STACK platforms"
+	default y
+	select MXC_PSEUDO_IRQS if MXC_PMIC_MC9SDZ60
+	help
+	  Include support for MX35 3STACK platform. This includes specific
+	  configurations for the board and its peripherals.
+
+config MACH_MX35_LUIGI
+        bool "Support for MX35 LUIGI Platform"
+        default y
+        select MACH_LUIGI_LAB126
+        help
+          Include support for the MX35 Luigi Platform from LAB126.
+
+config MACH_LUIGI_LAB126
+        bool "Enable Lab126 specific changes for the Luigi Platform"
+
+config MACH_MX35EVB
+	bool "Support MX35EVB platforms"
+	default n
+	help
+	  Include support for MX35EVB platform. This includes specific
+	  configurations for the board and its peripherals.
+
+config MX35_DOZE_DURING_IDLE
+	bool "Enter Doze mode during idle"
+	help
+	  Turning on this option will put the CPU into Doze mode during idle.
+	  The default is to enter Wait mode during idle. Doze mode during
+	  idle will save additional power over Wait mode.
+
+config MXC_GPIO_DEBUG
+	bool "Dump backtrace to debug GPIO issues"
+	help
+	  There are several places in the kernel/drivers code where
+	  a GPIO pin is reserved twice or freed twice. This option when enabled
+	  dumps a backtrace the point the location which tried to request/free
+	  the GPIO pin twice
+
+config MX35_FIQ
+	bool "Enable the FIQ on the MX35"
+	select FIQ
+	help
+	  This option enables the FIQ on MX35 based SoC
+
+config MXC_SDMA_API
+        bool "Use SDMA API"
+        default y
+        help
+           This selects the Freescale MXC SDMA API.
+           If unsure, say N.
+
+menu "SDMA options"
+        depends on MXC_SDMA_API
+
+config SDMA_IRAM
+        bool "Use Internal RAM for SDMA transfer"
+        default n
+       help
+           Support Internal RAM as SDMA buffer or control structures
+
+config SDMA_IRAM_SIZE
+        hex "Reserved bytes of IRAM for SDMA (0x800-0x1000)"
+        range 0x800 0x1000
+        depends on SDMA_IRAM
+        default "0x1000"
+        help
+           Set the size of IRAM for SDMA. It must be a multiple of 512bytes.
+endmenu
+
+config ARCH_MXC_HAS_NFC_V2
+        bool "MXC NFC Hardware Version 2"
+        depends on ARCH_MX35
+        default y
+        help
+           This selects the Freescale MXC Nand Flash Controller Hardware Version 3
+           If unsure, say N.
+
+config ARCH_MXC_HAS_NFC_V2_1
+        bool "MXC NFC Hardware Version 2.1"
+        depends on ARCH_MXC_HAS_NFC_V2
+        default y
+        help
+           This selects the Freescale MXC Nand Flash Controller Hardware Version 2.1
+           If unsure, say N.
+
+menu "Device options"
+
+config I2C_MXC_SELECT1
+	bool "Enable I2C1 module"
+	default y
+	depends on I2C_MXC
+	help
+	  Enable MX35 I2C1 module.
+
+config I2C_MXC_SELECT2
+	bool "Enable I2C2 module"
+	default n
+	depends on I2C_MXC
+	help
+	  Enable MX35 I2C2 module.
+
+config I2C_MXC_SELECT3
+	bool "Enable I2C3 module"
+	default n
+	depends on I2C_MXC
+	help
+	  Enable MX35 I2C3 module.
+
+endmenu
+
+config MXC_PSEUDO_IRQS
+	bool
+
+config PROC_BOOTDATA
+	bool "Boot data driver"
+	default y
+	depends on MACH_MX35_LUIGI
+	---help---
+	  This option enables the creation of the /proc/bd/ entries,
+	  which provide an interface for accessing various shared boot
+	  global data entries in the common memory space between the
+	  kernel and bootloader.
+
+config PROC_BOARDID
+	bool "Device Board ID and Serial Number driver"
+	default y
+	depends on MACH_MX35_LUIGI
+	---help---
+	  This option enables the creation of the /proc/board_id and
+	  /proc/serialnumber entries, which returns the unique serial number of
+	  the device.
+
+endmenu
